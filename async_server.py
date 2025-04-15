@@ -11,7 +11,7 @@ class Model:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.slowfast = slowfast_r50_detection(True).eval().to(self.device)
         self.ava_labels, _ = AvaLabeledVideoFramePaths.read_label_map("configs/ava_action_list.pbtxt")
-        self.detect_interval = 50  # 设定slowfast触发频率（/fps）
+        self.detect_interval = 50  # SlowFast のトリガー頻度 (/fps) を設定
         self.action_labels = {}
 
     def slowfast_inference(self, frame_count, track_ids, boxes, get_clips):
@@ -32,13 +32,13 @@ class Model:
                 self.action_labels[id] = self.ava_labels[avalabel + 1]
         return self.action_labels
 
-# 创建守护进程并绑定对象
+# デーモンを作成し、オブジェクトをバインドする
 def main():
-    daemon = Pyro4.Daemon()  # 创建Pyro4守护进程
-    uri = daemon.register(Model)  # 将Model类注册到守护进程中
+    daemon = Pyro4.Daemon()  # Pyro4 デーモンを作成
+    uri = daemon.register(Model)  # Model クラスをデーモンに登録
 
-    print(f"Model service is running. URI: {uri}")  # 打印对象的URI，远程调用时使用
-    daemon.requestLoop()  # 启动守护进程并监听远程请求
+    print(f"Model service is running. URI: {uri}")  # オブジェクトの URI を表示（リモート呼び出し時に使用）
+    daemon.requestLoop()  # デーモンを起動し、リモートリクエストをリッスン
 
 if __name__ == '__main__':
     main()
