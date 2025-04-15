@@ -49,6 +49,7 @@ Realsense SDK の rs2::pointcloud クラスを使用して、深度画像を 3D 
 MMAction2 内のビデオ行動認識アルゴリズムの使用を検討する。しかし、既存の多くのアルゴリズムは複雑すぎるため、単純な立位、座位、倒立、歩行の識別に適したものが少ない。独自にデータセットを構築して再学習することを検討する。
 
 **1.FUKinect-Fall データセット**
+
 Kinect V1 によって構築された、歩行、屈む、座る、しゃがむ、横になる、転倒の動作を含むデータセット。参加者：21名、年齢範囲 19-72 歳。データ量：合計 1008 個の深度ビデオ、20 個の関節の 3D 座標 (x, y, z) を記録。データ構造：6 種類の動作 × 8 回の繰り返し × 21 名の参加者。ビデオ仕様：約 4-5 秒の長さ、解像度 320×240、30 フレーム/秒。
 
 Aslan M., Akbulut Y., Sengor A., CevdetInce M. "Skeleton based efficient fall detection", J. Faculty Eng. Architecture Gazi Univ., 32 (4) (2017), pp. 1025-1034. (DOI: 10.17341/gazimmfd.369347)
@@ -56,6 +57,7 @@ Aslan M., Akbulut Y., Sengor A., CevdetInce M. "Skeleton based efficient fall de
 FUKinect-Fall データセットに立位のカテゴリを拡張し、時系列ネットワークを通じて識別できる。まず関節点を識別し、次にカテゴリを識別する。
 
 **2.AVA データセット**
+
 代表的なアルゴリズム 「SlowFast」
 python .\demo\demo.py
 configs/detection/slowfast/slowfast_kinetics400-pretrained-r50_8xb6-8x8x1-cosine-10e_ava22-rgb.py .\checkpoints\slowfast_kinetics400-pretrained-r50_8xb6-8x8x1-cosine-10e_ava22-rgb_20220906-d934a48f.pth .\demo\demo.mp4 tools/data/ava/label_map.txt
