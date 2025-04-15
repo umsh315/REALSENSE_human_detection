@@ -1,17 +1,17 @@
-# 华科数字图像处理综合设计与实验--深度相机实验
-## 简介
-实验要求：使用 RealsenseD455 相机，设计自顶向下的识别方法，先通过 yolo 利用纯 RGB 信息识别行人，然后将行人提取框在深度图中的对应部分进行深度变化识别，可区分照片和真人。在检测到人形目标后，计算距离、移动速度，可区分目标行为，包括：站立、坐下、倒地、行走
+# RGBD画像処理
+## 概要
+実験要求：Realsense D455 カメラを使用し、トップダウン方式の識別方法を設計する。まず、YOLO を用いて純粋な RGB 情報から歩行者を識別し、次に歩行者の抽出された領域に対応する深度画像の部分で深度変化を識別することで、写真と実物の人間を区別する。人体形状の目標が検出された後、距離と移動速度を計算し、立位、座位、倒立、歩行といった目標の行動を区別する。
 
-算法分析位于[Analysis.md](Analysis.md)中。
+アルゴリズムは[Analysis.md](Analysis.md)に記述されている。
 
-## 配置
+## インストール
 
-创建conda环境
+conda環境の作成
 ```
 conda create -n human-detection python=3.8
 conda activate human-detection
 ```
-安装依赖
+依存関係のインストール
 ```
 conda install pytorch torchvision==0.13.0 pytorch-cuda -c pytorch -c nvidia
 pip install ultralytics shapely lap onnx>=1.12.0 onnxslim onnxruntime -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -19,10 +19,8 @@ pip install pytorchvideo -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install opencv-python pyrealsense2 pyro4 -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-## 使用
-运行main.py，通过直接修改源码中Detector的输入参数进行效果调节
+## 使用方法
+main.py を実行し、ソースコード内の Detector の入力パラメータを直接修正することで効果を調整できる。
 
-可以选择令is_parallel变量为True，激活异步并行推理模式。并行化需要先运行async_server.py文件，然后将该文件返回的PYRO uri 填入main.py的对应位置，然后再启动main.py
+is_parallel 変数を True に設定することで、非同期並列推論モードを有効にできる。並列化を行うには、まず async_server.py ファイルを実行し、そのファイルが返した PYRO URI を main.py の対応する位置に記入した後、main.py を起動する。
 
-## 支持
-如果该项目对你有一点小小的启发，请帮忙点亮一下Star，感谢！
