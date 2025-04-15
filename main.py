@@ -23,15 +23,15 @@ if __name__ == '__main__':
     speed_obj = Detector(
         classid=0,
         model="models/yolo11n-seg.pt", # or yolo11n.onnx # yolo11n_openvino_model
-        conf= 0.25, # yolo的检测置信度
+        conf= 0.25, # yolo検出信頼度
         show=True,
         tracker="bytetrack.yaml",    # or botsort.yaml
         showmask=False,
         device=device,
-        slowfast=video_model,   # slowfast模型 or None
+        slowfast=video_model,   # slowfastモデル or None
         ava_labels=ava_labelnames,
-        detect_interval=50,  # 设定slowfast触发频率（/fps）
-        deque_length=1,  # slowfast的输入帧队列长度
+        detect_interval=50,  # SlowFastのトリガー頻度 (/fps) を設定
+        deque_length=1,  # SlowFastの入力フレームキューの長さ
         is_parallel=is_parallel,
         pyro_model=pyro_model
     )
@@ -46,18 +46,18 @@ if __name__ == '__main__':
 
     pipeline.start(config)
     profile = pipeline.get_active_profile()
-    # 获取深度相机的内参
+    # 深度カメラの内部パラメータを取得
     depth_stream_profile = profile.get_stream(rs.stream.depth)
     intrinsics = depth_stream_profile.as_video_stream_profile().get_intrinsics()
     fx, fy, cx, cy = intrinsics.fx, intrinsics.fy, intrinsics.ppx, intrinsics.ppy
-    print("相机内参：",f"fx: {fx}, fy: {fy}, cx: {cx}, cy: {cy}")
+    print("カメラ内部パラメータ：",f"fx: {fx}, fy: {fy}, cx: {cx}, cy: {cy}")
 
     if is_parallel:
         speed_obj.parallel_run(pipeline, align, fx, fy, cx, cy)
     else:
         while True:
             frames = pipeline.wait_for_frames()
-            # RGB-D 对齐
+            # RGB-D のアラインメント
             aligned_frames = align.process(frames)
             aligned_color_frame = aligned_frames.get_color_frame()
             aligned_depth_frame = aligned_frames.get_depth_frame()
@@ -67,7 +67,7 @@ if __name__ == '__main__':
             rgb = np.asanyarray(aligned_color_frame.get_data())
             d = np.asanyarray(aligned_depth_frame.get_data())
 
-            # 在 Detector 的 estimate 中生成点云并完成速度计算
+            # Detector の estimate で点群を生成し、速度計算を実行
             annotated_frame = speed_obj.estimate(rgb, d, fx, fy, cx, cy)
 
             if cv2.waitKey(1) & 0xFF == ord("q"):
